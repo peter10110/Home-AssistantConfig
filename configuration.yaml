@@ -14,6 +14,12 @@ homeassistant:
   customize: !include customize.yaml
   packages: !include_dir_named packages
 
+  # auth_providers:
+  #   - type: homeassistant
+  #   - type: legacy_api_password
+
+auth:
+
 # Logger
 logger:
   default: error
@@ -24,13 +30,18 @@ frontend: !include frontend.yaml
 # Enables configuration UI
 config:
 
+cast:
+
 http:
   # Uncomment this to add a password (recommended!)
   api_password: !secret http_password
   # Uncomment this if you are using SSL/TLS, running in Docker container, etc.
   # base_url: example.duckdns.org:8123
-  ssl_certificate: !secret ssl_certificate
-  ssl_key: !secret ssl_key
+  # ssl_certificate: !secret ssl_certificate
+  # ssl_key: !secret ssl_key
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - !secret proxy_ip
 
   base_url: !secret base_url
 
@@ -38,7 +49,7 @@ http:
     - !secret trusted_ip
     - !secret trusted_ip_2
 
-  ip_ban_enabled: True
+  ip_ban_enabled: true
   login_attempts_threshold: 10
 
 # Checks for available updates
@@ -46,6 +57,9 @@ updater:
 
 # Discover some devices automatically
 discovery:
+  ignore:
+    - songpal
+    - philips_hue
 
 # Enables support for tracking state changes over time
 history:
@@ -69,8 +83,11 @@ sun:
 # Map
 map:
 
-# Google Home
-google_assistant: !include google_assistant.yaml
+# Wake on LAN
+wake_on_lan:
+
+# Cloud
+cloud: !include cloud.yaml
 
 # MQTT Broker
 mqtt:
@@ -79,10 +96,20 @@ mqtt:
   username: !secret msmqtt_username
   password: !secret msmqtt_password
   port: !secret msmqtt_port
+  discovery: true
+  birth_message:
+    topic: 'hass/status'
+    payload: 'online'
+  will_message:
+    topic: 'hass/status'
+    payload: 'offline'
 
 # Text to speech
 tts:
-  - platform: google
+  - platform: google_translate
+    service_name: google_say
+    base_url: !secret tts_base_url
+#    api_key: !secret microsoft_bing_speech_api_key
 
 # Netatmo Config
 netatmo:
@@ -90,7 +117,22 @@ netatmo:
   secret_key: !secret netatmo_secret_key
   username: !secret netatmo_username
   password: !secret netatmo_password
-  discovery: False
+  discovery: true
+
+# Nuki Smart Lock
+lock:
+  - platform: nuki
+    host: !secret nuki_host
+    token: !secret nuki_token
+
+# Dyson
+dyson:
+  username: !secret dyson_username
+  password: !secret dyson_password
+  language: GB
+  devices:
+    - device_id: !secret dyson_pure_serial
+      device_ip: !secret dyson_pure_ip
 
 # Roomba
 vacuum:
@@ -115,13 +157,17 @@ homematic:
       password: !secret homematic_password
 
 # IKEA Tradfri
-tradfri:
-  host: !secret tradfri_host
+# tradfri:
+#   host: !secret tradfri_host
 
 # Philips Hue
 hue:
   bridges:
     - host: 192.168.1.64
+
+geo_location:
+  - platform: usgs_earthquakes_feed
+    feed_type: 'past_hour_m25_earthquakes'
 
 # History Graph Test
 history_graph:
@@ -137,7 +183,21 @@ history_graph:
       - sensor.cpu_load_total
       - sensor.memory_usage_real
 
-###########INCLUDES#####
+# System health
+system_health:
+
+# World Wide Lightning Location Network (WWLLN)
+wwlln:
+
+# Persons
+person:
+#   - name: Steff
+#     id: !secret steff_id
+#     user_id: !secret steff_user_id
+#     device_trackers:
+#       - device_tracker.3c_28_6d_2d_3c_67
+
+########### INCLUDES #####
 sensor: !include_dir_list sensors/
 switch: !include_dir_list switches/
 camera: !include_dir_list cameras/
@@ -157,6 +217,7 @@ scene: !include_dir_merge_list scenes/
 
 input_number: !include_dir_merge_named input_number/
 input_boolean: !include_dir_merge_named input_boolean/
+input_select: !include_dir_merge_named input_select/
 timer: !include_dir_merge_named timers/
 group: !include_dir_merge_named groups/
 script: !include_dir_merge_named scripts/
@@ -164,3 +225,31 @@ alert: !include_dir_merge_named alerts/
 
 panel_custom: !include panel_custom.yaml
 weblink: !include misc/weblinks.yaml
+
+
+# # Utility Meters TESTING
+# utility_meter:
+#   bathroom_heater_daily:
+#     source: sensor.mystrom_bathroom_heater
+#     cycle: monthly
+#     tariffs:
+#       - peak
+#       - offpeak
+#   bathroom_heater_monthly:
+#     source: sensor.mystrom_bathroom_heater
+#     cycle: monthly
+#     tariffs:
+#       - peak
+#       - offpeak
+#   mystrom_daily:
+#     source: sensor.mystrom_combined
+#     cycle: monthly
+#     tariffs:
+#       - peak
+#       - offpeak
+#   mystrom_monthly:
+#     source: sensor.mystrom_combined
+#     cycle: monthly
+#     tariffs:
+#       - peak
+#       - offpeak

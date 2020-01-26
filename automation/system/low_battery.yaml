@@ -6,7 +6,7 @@
       entity_id: sensor.computer_lamp_remote
       below: 25
   action:
-    - service: notify.html5
+    - service: notify.hangouts
       data:
         message: "Computer Lamp Remote is low on Battery"
         title: "Low Battery Warning"
@@ -19,7 +19,7 @@
       entity_id: sensor.bathroom_remote
       below: 25
   action:
-    - service: notify.html5
+    - service: notify.hangouts
       data:
         message: "Bathroom Remote is low on Battery"
         title: "Low Battery Warning"
@@ -32,7 +32,7 @@
       entity_id: sensor.tv_light_remote
       below: 25
   action:
-    - service: notify.html5
+    - service: notify.hangouts
       data:
         message: "TV Lamp Remote is low on Battery"
         title: "Low Battery Warning"

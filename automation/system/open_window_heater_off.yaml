@@ -1,0 +1,33 @@
+- alias: "Reduce Temperature if Window open"
+  id: climate_reduce_temperature_window_open
+  trigger:
+    - platform: state
+      entity_id: group.windows
+      from: "off"
+      to: "on"
+      for:
+        seconds: 15
+        minutes: 0
+        hours: 0
+  action:
+    - service: climate.set_away_mode
+      data:
+        entity_id: climate.netatmo_living_room
+        away_mode: true
+
+- alias: "Increase Temperature if Window closed"
+  id: climate_increase_temperature_window_closed
+  trigger:
+    - platform: state
+      entity_id: group.windows
+      from: "on"
+      to: "off"
+      for:
+        seconds: 15
+        minutes: 0
+        hours: 0
+  action:
+    - service: climate.set_away_mode
+      data:
+        entity_id: climate.netatmo_living_room
+        away_mode: false

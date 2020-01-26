@@ -2,7 +2,7 @@
   id: coming_home_change_thermostats
   trigger:
     platform: state
-    entity_id: device_tracker.404e36855fdd
+    entity_id: group.presence
     from: 'not_home'
     to: 'home'
     for:
@@ -12,7 +12,7 @@
   action:
     - service: climate.set_away_mode
       data:
-        entity_id: climate.thermostat
+        entity_id: climate.netatmo_living_room
         away_mode: false
     - service: climate.set_away_mode
       data:

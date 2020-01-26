@@ -1,0 +1,461 @@
+resources:
+  # - url: /local/custom_ui/weather-card.js
+  #   type: js
+  # - url: /local/custom_ui/gauge-card/gauge-card.js?v=5
+  #   type: js
+  - url: /local/custom_ui/bignumber-card/bignumber-card.js?v=1
+    type: js
+  - url: /local/custom_ui/thermostat-card/thermostat-card.js?v=1
+    type: module
+  # - url: /local/custom_ui/mini-graph-card/mini-graph-card.js?v=0.0.1
+  #   type: module
+
+title: Home
+views:
+    # The name of a view will be used as tab title.
+    # Might be used for other things in the future.
+  - title: Rooms
+    icon: mdi:floor-plan
+    # Each view can have a different theme applied. Theme should be defined in the frontend.
+    # The cards to show on this view.
+    cards:
+      - type: glance
+        column_width: calc(100% / 4)
+        show_state: false
+        entities:
+          - entity: script.leaving_home
+            name: Leave
+            tap_action: toggle
+            icon: mdi:home
+          - entity: script.tv_light
+            name: TV Lights
+            tap_action: toggle
+            icon: mdi:television
+          - entity: script.bed_youtube
+            name: Bedtime
+            tap_action: toggle
+            icon: mdi:laptop-windows
+          - entity: lock.home
+            name: Front Door
+            tap_action: toggle
+      - type: entities
+        title: Livingroom
+        entities:
+          - entity: light.living_room_ceiling_lamp
+            name: Ceiling
+          - entity: light.living_room_under_couch
+            name: Under Couch
+          - entity: light.tv_light_bulb
+            name: TV Background Lamp
+          - entity: light.computer_lamp_bulb
+            name: Computer Lamp
+          - entity: light.living_room_corner_lamp
+            name: Corner Lamp
+          - entity: light.livingroom_plant
+            name: Plant Lights
+          # - switch.ikea_planter
+          # - sensor.planter_lamp_ontime
+          - entity: fan.livingroom_fan
+            name: Ceiling Fan
+          - vacuum.roomba
+          - binary_sensor.roomba_bin
+          # - media_player.kd55x8505c
+          - entity: climate.netatmo_living_room
+            name: Thermostat
+          - entity: climate.living_room
+            name: Dyson Pure Hot + Cool
+          - entity: sensor.livingroom_temperature_couch
+            name: Temperature Couch
+          - sensor.mystrom_computer
+          - sensor.mystrom_tv
+          - binary_sensor.livingroomdoor_state
+          - binary_sensor.livingroomwindow_state
+      - type: entities
+        title: Bedroom
+        entities:
+          - entity: light.bedroom_nightstand
+            name: Nighstand
+          - entity: light.bedroom_2
+            name: Ceiling
+          - entity: light.bedroom_4
+            name: Bed Lights
+          - entity: light.bedroom_corners
+            name: Corner Lamps
+          - entity: switch.bedroom_fan
+            name: Fan
+          # - entity: sensor.hx711_bed_sensor
+          #   name: Bed Sensor RAW
+          # - entity: sensor.bed_sensor_kg
+          #   name: Bed Sensor KG
+          # - switch.bedroom_alarmclock
+          - entity: sensor.netatmo_bedroom_temperature
+            name: Temperature
+          - entity: sensor.netatmo_bedroom_humidity
+            name: Humidity
+          - entity: sensor.netatmo_bedroom_co2
+            name: Co2
+          - entity: sensor.netatmo_bedroom_noise
+            name: Noise
+          - binary_sensor.bedroomdoor_state
+          - binary_sensor.bedroomwindow_state
+      - type: entities
+        title: Kitchen
+        entities:
+          - entity: light.kitchen_2
+            name: Sink Lamp
+          - entity: light.kitchen_1
+            name: Table Lamp
+          - entity: lock.home
+            name: Front Door Lock
+          - entity: sensor.kitchen_temperature
+            name: Temperature
+          - entity: sensor.kitchenthermometer_humidity
+            name: Humidity
+          - binary_sensor.entrancedoor_state
+          - binary_sensor.kitchenwindow_state
+      - type: entities
+        title: Office
+        entities:
+          - entity: light.office_ceiling
+            name: Ceiling Lamp
+          - entity: switch.ikea_planter
+            name: IKEA Planter
+          - sensor.netatmo_office_temperature
+          - sensor.netatmo_office_humidity
+          - sensor.netatmo_office_co2
+          - binary_sensor.officedoor_state
+          - binary_sensor.officewindow_state
+      - type: entities
+        title: Bathroom
+        entities:
+          - entity: group.bathroom_ceiling
+            name: Ceiling Lamps
+          - entity: switch.bathroom_heater
+            name: Heater
+          - entity: climate.bathroom
+            name: Thermostat
+          # - timer.bathroom_heater
+          - entity: sensor.bathroomthermostat_humidity
+            name: Humidity
+          # - input_boolean.ignore_bathroom_door
+          - binary_sensor.bathroomdoor_state
+      - type: entities
+        title: Outdoor
+        entities:
+          - entity: light.outdoor_1
+            name: Entrance Lamp
+          # - switch.xmas_lights
+          - sensor.netatmo_outdoormodule_temperature
+          - sensor.windchill_temperature
+          - sensor.netatmo_outdoormodule_humidity
+          - sensor.netatmo_bedroom_pressure
+  - title: Apartment
+    icon: mdi:home
+    cards:
+      - type: entities
+        entities:
+          - input_boolean.holidays
+      - type: entities
+        entities:
+          - fan.living_room
+          - climate.living_room
+          - sensor.living_room_aqi
+          - sensor.living_room_dust
+          - sensor.living_room_filter_life
+          - sensor.living_room_humidity
+      - type: vertical-stack
+        cards:
+          - type: entities
+            title: Climate
+            entities:
+              - entity: climate.netatmo_living_room
+                name: Living Room
+              - entity: sensor.netatmo_bedroom_temperature
+                name: Bedroom
+              - entity: climate.bathroom
+                name: Bathroom
+              - entity: sensor.netatmo_office_temperature
+                name: Office
+              - entity: sensor.kitchen_temperature
+                name: Kitchen
+              - entity: sensor.netatmo_outdoormodule_temperature
+                name: Outdoor
+          - type: entities
+            title: Presence Detection
+            entities:
+              # - device_tracker.steff_phone_pixel
+              # - device_tracker.fa79v1a07669
+              - device_tracker.b02a43fcbe53  # Steff Pixel 3
+              #- device_tracker.88px01wkd  # Steff GPS Pixel 3
+              - device_tracker.steff_pixel_3  # Traccar steff pixel 3
+      - type: horizontal-stack
+        cards:
+          - type: custom:thermostat-card
+            title: Living Room
+            entity: climate.netatmo_living_room
+          - type: custom:thermostat-card
+            title: Bathroom
+            entity: climate.bathroom
+      - type: entity-filter
+        # column_width: calc(100% / 3)
+        # show_state: false
+        entities:
+          - binary_sensor.bathroomdoor_state
+          - binary_sensor.bedroomdoor_state
+          - binary_sensor.bedroomwindow_state
+          - binary_sensor.entrancedoor_state
+          - binary_sensor.kitchenwindow_state
+          - binary_sensor.livingroomdoor_state
+          - binary_sensor.livingroomwindow_state
+          - binary_sensor.officedoor_state
+          - binary_sensor.officewindow_state
+        state_filter:
+          - "on"
+      - type: picture-entity
+        entity: device_tracker.mazda_6
+        state_image:
+          "home": /local/image_status/mazda/mazda_HOME.jpg
+          "away": /local/image_status/mazda/mazda_AWAY.jpg
+      - type: picture-entity
+        entity: vacuum.roomba
+        state_image:
+          "on": /local/image_status/roomba/roomba_on.jpg
+          "off": /local/image_status/roomba/roomba_off.jpg
+  - title: "3D Printer"
+    icon: mdi:printer-3d
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: picture-entity
+            title: Prusa MK3
+            entity: camera.prusa_i3_mk3
+            camera_image: camera.prusa_i3_mk3
+            show_state: false
+            show_name: false
+          - type: entities
+            entities:
+              - binary_sensor.3d_printer_power_status
+  - title: Weather
+    icon: mdi:weather-partlycloudy
+    cards:
+      # - type: "custom:weather-card"
+      #   entity_weather: weather.weather_oberried
+      #   entity_sun: sun.sun
+      - type: horizontal-stack
+        cards:
+          - type: gauge
+            title: Lux
+            entity: sensor.tsl2561_ambient_light
+            min: 0
+            max: 90000
+          - type: gauge
+            title: Humidity
+            entity: sensor.netatmo_outdoormodule_humidity
+            min: 0
+            max: 100
+      - type: horizontal-stack
+        cards:
+          - type: custom:bignumber-card
+            title: Rain Today
+            entity: sensor.rain_today_brienz
+            from: bottom
+            min: 0
+            max: 25
+            scale: 20px
+            severity:
+              - value: 25
+                style: '#0288D1'
+          - type: custom:bignumber-card
+            title: Aare Brienzwiler
+            entity: sensor.aare_brienzwiler_discharge
+            from: bottom
+            min: 0
+            max: 200
+            scale: 20px
+            severity:
+              - value: 200
+                style: '#0288D1'
+          - type: custom:bignumber-card
+            title: Aare Ringgenberg
+            entity: sensor.aare_ringgenberg_discharge
+            from: bottom
+            min: 0
+            max: 200
+            scale: 20px
+            severity:
+              - value: 200
+                style: '#0288D1'
+      - type: vertical-stack
+        cards:
+          - type: glance
+            title: Aare Brienzwiler
+            column_width: 25%
+            entities:
+              - entity: sensor.aare_brienzwiler_discharge
+                name: Discharge
+              - entity: sensor.aare_brienzwiler_temperature
+                name: Temperature
+              - entity: sensor.aare_brienzwiler_waterlevel
+                name: Waterlevel
+              - entity: sensor.aare_brienzwiler_danger_level
+                name: Danger Level
+          - type: glance
+            title: Aare Ringgenberg
+            column_width: 25%
+            entities:
+              - entity: sensor.aare_ringgenberg_discharge
+                name: Discharge
+              - entity: sensor.aare_ringgenberg_temperature
+                name: Temperature
+              - entity: sensor.aare_ringgenberg_waterlevel
+                name: Waterlevel
+              - entity: sensor.aare_ringgenberg_danger_level
+                name: Danger Level
+          - type: glance
+            title: Aare Thun
+            column_width: 25%
+            entities:
+              - entity: sensor.aare_thun_discharge
+                name: Discharge
+              - entity: sensor.aare_thun_temperature
+                name: Temperature
+              - entity: sensor.aare_thun_waterlevel
+                name: Waterlevel
+              - entity: sensor.aare_thun_danger_level
+                name: Danger Level
+          - type: glance
+            title: Aare Bern
+            column_width: 25%
+            entities:
+              - entity: sensor.aare_bern_discharge
+                name: Discharge
+              - entity: sensor.aare_bern_temperature
+                name: Temperature
+              - entity: sensor.aare_bern_waterlevel
+                name: Waterlevel
+              - entity: sensor.aare_bern_danger_level
+                name: Danger Level
+  - title: Webcams
+    icon: mdi:panorama
+    panel: true
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: picture-entity
+                name: Windegg
+                entity: camera.webcam_axalp
+                camera_image: camera.webcam_axalp
+                show_state: false
+              - type: vertical-stack
+                cards:
+                  - type: horizontal-stack
+                    cards:
+                      - type: picture-entity
+                        name: Axalp
+                        entity: camera.webcam_axalp_2
+                        camera_image: camera.webcam_axalp_2
+                        show_state: false
+                      - type: picture-entity
+                        name: Brienz
+                        entity: camera.webcam_brienz
+                        camera_image: camera.webcam_brienz
+                        show_state: false
+                  - type: horizontal-stack
+                    cards:
+                      - type: picture-entity
+                        name: Bönigen
+                        entity: camera.webcam_bonigen
+                        camera_image: camera.webcam_bonigen
+                        show_state: false
+                      - type: picture-entity
+                        name: Brienz
+                        entity: camera.webcam_brienz_2
+                        camera_image: camera.webcam_brienz_2
+                        show_state: false
+          - type: picture-entity
+            name: Rothorn
+            entity: camera.webcam_rothorn
+            camera_image: camera.webcam_rothorn
+            show_state: false
+  - title: System
+    icon: mdi:flash
+    cards:
+      - type: horizontal-stack
+        cards:
+          # - type: gauge
+          #   title: Server
+          #   entity: sensor.mystrom_server
+          #   min: 0
+          #   max: 350
+          #   scale: "35px"
+          #   severity:
+          #     red: 250
+          #     green: 0
+          #     amber: 150
+          - type: gauge
+            title: PC
+            entity: sensor.mystrom_computer
+            min: 0
+            max: 800
+            scale: "35px"
+            severity:
+              red: 500
+              green: 0
+              amber: 250
+          - type: gauge
+            title: TV
+            entity: sensor.mystrom_tv
+            min: 0
+            max: 250
+            scale: "35px"
+            severity:
+              red: 200
+              green: 0
+              amber: 100
+  - title: TESTING
+    icon: mdi:test-tube
+    cards:
+      - type: entities
+        title: Hühnerstall
+        entities:
+          - sensor.huhner_tur_status_
+          - cover.chicken_door
+      - type: sensor
+        name: Lux
+        entity: sensor.tsl2561_ambient_light
+        height: 100
+      - type: picture-elements
+        image: /local/image_status/livingroom/tv/svg/background.png
+        elements:
+          - type: image
+            entity: light.tv_light_bulb
+            tap_action: none
+            image: /local/image_status/livingroom/tv/svg/tv_lamp.png
+            state_image:
+              "off": /local/image_status/livingroom/tv/null.png
+            style:
+              top: 50%
+              left: 50%
+              width: 100%
+          - type: image
+            entity: binary_sensor.tv_power_status
+            tap_action: none
+            image: /local/image_status/livingroom/tv/svg/tv.png
+            state_image:
+              "off": /local/image_status/livingroom/tv/null.png
+            style:
+              top: 50%
+              left: 50%
+              width: 100%
+          - type: image
+            entity: light.livingroom_plant
+            tap_action: none
+            image: /local/image_status/livingroom/tv/svg/planter.png
+            state_image:
+              "off": /local/image_status/livingroom/tv/null.png
+            style:
+              top: 50%
+              left: 50%
+              width: 100%

@@ -2,17 +2,26 @@
   id: alarmclock
   trigger:
     - platform: time
-      at: '07:00:00'
+      at: '07:10:00'
   condition:
+    - condition: state
+      entity_id: binary_sensor.is_sleeping
+      state: 'on'
+    - condition: state
+      entity_id: input_boolean.holidays
+      state: 'off'
     - condition: time
       weekday:
-      - mon
-      - tue
-      - wed
-      - thu
-      - fri
+        - mon
+        - tue
+        - wed
+        - thu
+        - fri
   action:
     - service: light.turn_on
       data:
         entity_id:
-          - group.bedroom
+          - light.bedroom_lights
+        transition: 600
+        kelvin: 5000
+        brightness: 255

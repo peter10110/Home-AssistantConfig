@@ -2,7 +2,7 @@
   id: coming_home_tv_lights
   trigger:
     platform: state
-    entity_id: device_tracker.404e36855fdd
+    entity_id: group.presence
     from: 'not_home'
     to: 'home'
     for:
@@ -17,4 +17,4 @@
     - service: light.turn_on
       data:
         entity_id:
-          - group.tv_lights_on
+          - light.living_room_normal_lights

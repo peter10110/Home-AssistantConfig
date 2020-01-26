@@ -1,13 +1,13 @@
       name: Demo Floorplan
       image: /local/custom_ui/floorplan/floorplan.svg
       stylesheet: /local/custom_ui/floorplan/floorplan.css
-      
+
       # These options are optional
       warnings:                  # enable warnings (to find out why things might ot be working correctly)
-      #pan_zoom:                  # enable experimental panning / zooming
+      # pan_zoom:                  # enable experimental panning / zooming
       # hide_app_toolbar:          # hide the application toolbar (when used as a custom panel)
       date_format: DD-MM-YYYY   # Date format to use in hover-over text
-      
+
       last_motion_entity: sensor.template_last_motion
       last_motion_class: last-motion
 
@@ -15,22 +15,22 @@
 
         - name: Thermostat
           entities:
-             -  climate.thermostat
-             -  climate.bathroom
-          #text_template: '${entity.state ? entity.state : "unknown"}'
+            - climate.netatmo_living_room
+            - climate.bathroom
+          # text_template: '${entity.state ? entity.state : "unknown"}'
           # An example of rounding up a number, i.e. a temperature of 90.1 becomes 91
-          text_template: '${entity.state ? ""+Math.round(entity.attributes.current_temperature*100)/100+"° C" : "undefined"}'  
+          text_template: '${entity.state ? ""+Math.round(entity.attributes.current_temperature*100)/100+"° C" : "undefined"}'
 
         - name: Sensors
           entities:
             - sensor.netatmo_office_temperature
             - sensor.netatmo_bedroom_temperature
             - sensor.netatmo_outdoormodule_temperature
-            - sensor.livingroom_temperature_couch
+            # - sensor.livingroom_temperature_couch
             - sensor.kitchen_temperature
-          #text_template: '${entity.state ? entity.state : "unknown"}'
+          # text_template: '${entity.state ? entity.state : "unknown"}'
           # An example of rounding up a number, i.e. a temperature of 90.1 becomes 91
-          text_template: '${entity.state ? ""+Math.round(entity.state*100)/100+"° C" : "undefined"}'  
+          text_template: '${entity.state ? ""+Math.round(entity.state*100)/100+"° C" : "undefined"}'
           # class_template: '
           #   var temp = parseFloat(entity.state.replace("°", ""));
           #   if (temp < 10)
@@ -40,22 +40,28 @@
           #   else
           #     return "temp-high";
           #   '
+        - name: Lightsensor
+          entities:
+            - sensor.tsl2561_ambient_light
+          # text_template: '${entity.state ? entity.state : "unknown"}'
+          # An example of rounding up a number, i.e. a temperature of 90.1 becomes 91
+          text_template: '${entity.state ? ""+Math.round(entity.state*10)/10+" lx" : "undefined"}'
 
         - name: Lights
           entities:
             - light.kitchen_1
             - light.kitchen_2
-            - light.living_room_ceiling_lamp
-            - light.bedroom_2
-            - light.bedroom_4
+            - light.ceiling_panel
+            - light.celing_panel_bedroom
             - light.outdoor_1
             - light.bedroom_nightstand
             - group.bathroom_ceiling
             - light.office_ceiling
-            - light.living_room_under_couch
             - light.computer_lamp_bulb
             - light.tv_light_bulb
-            - group.livingroomlightscouch
+            - light.bedroom_corner_right
+            - light.bedroom_corner_left
+            - light.living_room_corner_lamp
           states:
             - state: 'on'
               class: 'light-on'
@@ -65,16 +71,68 @@
             domain: homeassistant   # This optional parameter allows you to use other services such as homeassistant.toggle like here.
             service: toggle
 
+        - name: FurnitureLights
+          entities:
+            - light.bedroom_4
+            - light.living_room_under_couch
+            - light.livingroom_plant
+          states:
+            - state: 'on'
+              class: 'furniture-light-on'
+            - state: 'off'
+              class: 'furniture-light-off'
+          action:
+            domain: homeassistant   # This optional parameter allows you to use other services such as homeassistant.toggle like here.
+            service: toggle
+
+        - name: Locks
+          entities:
+            - lock.home
+          states:
+            - state: 'locked'
+              class: 'lock-locked'
+            - state: 'unlocked'
+              class: 'lock-unlocked'
+
+        # Cars
+        - name: Cars
+          entities:
+            - device_tracker.mazda_6
+          states:
+            - state: 'home'
+              class: 'car-home'
+            - state: 'away'
+              class: 'car-away'
+            - state: 'Work'
+              class: 'car-away'
+
         - name: Switches
           entities:
             - switch.bathroom_heater
-            - switch.bedroom_fan
-            - switch.ikea_planter
+            #- switch.bedroom_fan
+            - switch.3d_printer_light
+            - fan.livingroom_fan
           states:
             - state: 'on'
               class: 'switch-on'
             - state: 'off'
               class: 'switch-off'
+          action:
+            domain: homeassistant   # This optional parameter allows you to use other services such as homeassistant.toggle like here.
+            service: toggle
+
+        - name: Buttons
+          entities:
+            - input_boolean.holidays
+            - input_boolean.start_leave_home_script
+          states:
+            - state: 'on'
+              class: 'button-on'
+            - state: 'off'
+              class: 'button-off'
+          action:
+            domain: homeassistant   # This optional parameter allows you to use other services such as homeassistant.toggle like here.
+            service: toggle
 
         # - name: NVR
         #   entities:
@@ -110,6 +168,15 @@
             - state: 'off'
               class: 'door-closed'
 
+        - name: MotioNSensors
+          entities:
+            - binary_sensor.bathroom_presence
+          states:
+            - state: 'on'
+              class: 'motion-sensor-on'
+            - state: 'off'
+              class: 'motion-sensor_off'
+
         - name: Windows
           entities:
             - binary_sensor.officewindow_state
@@ -124,8 +191,8 @@
 
         - name: Devices
           entities:
-            - binary_sensor.sony_tv_status
-            - binary_sensor.steff_pc_status
+            - binary_sensor.tv_power_status
+            - binary_sensor.computer_power_status
           states:
             - state: 'on'
               class: 'device-on'
@@ -147,8 +214,6 @@
         #     service: good_night
 
 
-        
-
         # - name: Cameras
         #   entities:
         #     - camera.hallway
@@ -158,7 +223,7 @@
         #   states:
         #     - state: 'idle'
         #       class: 'camera-idle'
-              
+
 #        - name: thermostat_temp
 #          entities:
 #            - climate.downstairs

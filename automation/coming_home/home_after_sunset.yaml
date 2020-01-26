@@ -2,7 +2,7 @@
   id: coming_home_after_sunset
   trigger:
     platform: state
-    entity_id: device_tracker.404e36855fdd
+    entity_id: group.presence
     from: 'not_home'
     to: 'home'
     for:
@@ -26,3 +26,8 @@
       data:
         entity_id:
           - light.kitchen_2
+    - delay: 15:00
+    - service: light.turn_off
+      data:
+        entity_id:
+          - light.outdoor_1
